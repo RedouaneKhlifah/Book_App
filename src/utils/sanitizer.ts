@@ -9,7 +9,7 @@ export const sanitizer = <T extends Record<string, any>>(data: T): T => {
             // If the value of the key is an object, recursively sanitize its properties
             SanitizedData[key] = sanitizer(data[key]);
         } else {
-            SanitizedData[key] = data[key].customTrim();
+            SanitizedData[key] = data[key].toString().customTrim();
         }
     });
 

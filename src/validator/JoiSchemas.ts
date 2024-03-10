@@ -1,4 +1,5 @@
 import Joi, { ObjectSchema } from "joi";
+import { IBook } from "src/types/bookTypes";
 
 /**
  * @desc schema that defines custom Error Messages
@@ -21,26 +22,15 @@ const customErrorMessages: CustomErrorMessages = {
 /**
  * @Book
  */
-export interface IBook {
-    title: string;
-    image: string;
-    pages: number;
-    autor: string;
-    rating: number;
-    description: string;
-    language: string;
-    category: string;
-}
 
 export const BookSchema: ObjectSchema<IBook> = Joi.object({
     title: Joi.string().required(),
     image: Joi.string().required(),
     pages: Joi.number().required(),
-    autor: Joi.string().required(),
+    author: Joi.string().required(),
     rating: Joi.number().required(),
     description: Joi.string().required(),
-    language: Joi.string().required(),
-    category: Joi.string().required()
+    language: Joi.string().required()
 });
 
 export const validator = (schema: ObjectSchema, data: object) => {
@@ -60,10 +50,11 @@ export const validator = (schema: ObjectSchema, data: object) => {
 
                 return {
                     field: field || "",
-                    message: errorMessage
+                    message: field + " " + errorMessage
                 };
             }
         );
-        throw new Error(JSON.stringify(errors));
+        return errors;
     }
+    return null;
 };
