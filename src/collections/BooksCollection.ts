@@ -1,53 +1,27 @@
-import { Timestamp, addDoc, collection } from "@firebase/firestore";
-import db from "src/config/db";
+// import { Timestamp } from "@firebase/firestore";
+import db from "../config/db";
+import { IBook } from "src/types/bookTypes";
+import { DocumentReference } from "firebase-admin/firestore";
 
-const BooksCollection = collection(db, "users");
-
-//  Define the type for book data
-interface IBook {
-    title: string;
-    image: string;
-    pages: number;
-    author: string;
-    rating: number;
-    description: string;
-    language: string;
-    category: string;
-    createdAt?: Timestamp;
-}
+export const BooksCollection = db.collection("books");
 
 // Book class
 class Book {
     private data: IBook;
 
     constructor(data: IBook) {
-        this.data = { ...data, createdAt: Timestamp.now() };
+        this.data = { ...data };
     }
 
-    async save() {
+    async save(): Promise<DocumentReference> {
         try {
-            const docRef = await addDoc(BooksCollection, this.data);
-
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("Error adding document: ", e);
+            const docRef = await BooksCollection.add(this.data);
+            return docRef;
+        } catch (err) {
+            throw new Error(err);
         }
     }
 }
 
 export default Book;
 
-// // Example of creating and saving a book instance
-// const newBookData: IBook = {
-//     title: "Sample Book",
-//     image: "sample-image.jpg",
-//     pages: 200,
-//     author: "John Doe",
-//     rating: 4.5,
-//     description: "A sample book description.",
-//     language: "English",
-//     category: "Fiction"
-// };
-
-// const newBook = new Book(newBookData);
-// newBook.save();
