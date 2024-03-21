@@ -55,7 +55,7 @@ const BookModal: React.FC<BookModalProps> = ({book}) => {
         });
       }
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Errorr:', err);
     }
   };
   const handleInputChange = (fieldName: string, value: string | number) => {
